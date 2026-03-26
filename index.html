@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5G Signal Coverage Monitoring System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>5G Signal Coverage Monitoring System</h1>
+        </header>
+        <div class="map-container">
+            <canvas id="coverage-map"></canvas>
+        </div>
+        
+        <div class="info-panel">
+            <h3>Base station information <button id="add-bs"> + Manage stations</button></h3>
+            <table id="base-stations-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>name</th>
+                        <th>X</th>
+                        <th>Y</th>
+                        <th>Height</th>
+                        <th>Title Angle</th>
+                        <th>Antenna gain</th>
+                        <th>Azimuth</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="info-panel">
+            <h3>User equipment monitoring</h3>
+            <div class="user-input-form">
+                <label for="user-id">User ID：</label>
+                <input type="text" id="user-id" placeholder="Please enter your user ID">
+                
+                <label for="user-x">X（m）：</label>
+                <input type="number" id="user-x" placeholder="X coordinates">
+                
+                <label for="user-y">Y（m）：</label>
+                <input type="number" id="user-y" placeholder="Y coordinates">
+                
+                <label for="user-height">Height（m）：</label>
+                <input type="number" id="user-height" placeholder="Height" value="1.5">
+                
+                <button id="add-user">Adding a user device</button>
+                
+                <div class="random-generate">
+                    <label for="device-count">Generated quantity (1-100):</label>
+                    <input type="number" id="device-count" min="1" max="100" value="10">
+                    <button id="generate-random">Randomly generated users</button>
+                </div>
+            </div>
+         
+            <div id="user-devices-info">
+            </div>
+            
+            <!-- 添加分析按钮 -->
+            <button id="analyze-rsrp" style="margin-top: 15px; padding: 8px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Analyze data</button>
+                
+            <!-- 添加统计结果显示区域 -->
+            <div id="rsrp-stats" class="stats-container">
+                <h3>RSRP statistics</h3>
+                <div class="stats-content">
+                    <p>sample size: <span id="sample-count">0</span></p>
+                    <p>Average: <span id="mean-value">0.00 dBm</span></p>
+                    <p>variance: <span id="variance-value">0.00</span></p>
+                    <p>Standard deviation: <span id="std-dev-value">0.00</span></p>
+                    <p>Coverage probability: <span id="coverage-probability">0.00%</span></p>
+                </div>
+            </div>
+            
+            <div id="sinr-stats" class="stats-container">
+                <h3>SINR statistics</h3>
+                <div class="stats-content">
+                    <p>sample size: <span id="sinr-sample-count">0</span></p>
+                    <p>Average: <span id="sinr-mean-value">0.00 dB</span></p>
+                    <p>variance: <span id="sinr-variance-value">0.00</span></p>
+                    <p>Standard deviation: <span id="sinr-std-dev-value">0.00</span></p>
+                    <p>Coverage probability: <span id="sinr-coverage-probability">0.00%</span></p>
+                </div>
+            </div>
+
+            <div class="chart-vertical-container">
+                <div class="chart-fullwidth">
+                    <h4> RSRP CDF curve(cumulative distribution function)</h4>
+                    <div class="chart-wrapper">
+                        <canvas id="rsrp-cdf"></canvas>
+                    </div>
+                    <div class="chart-note">
+                        <p>Horizontal axis: RSRP (dBm) | Vertical axis: cumulative probability (0~1)</p>
+                    </div>
+                </div>
+                
+                <div class="chart-fullwidth">
+                    <h4>RSRP PDF curve(cumulative distribution function)</h4>
+                    <div class="chart-wrapper">
+                        <canvas id="rsrp-pdf"></canvas>
+                    </div>
+                    <div class="chart-note">
+                        <p>Horizontal axis: RSRP (dBm) | Vertical axis: cumulative probability </p>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="chart-vertical-container">
+                <div class="chart-fullwidth">
+                    <h4>SINR CDF curve(cumulative distribution function)</h4>
+                    <div class="chart-wrapper">
+                        <canvas id="sinr-cdf"></canvas>
+                    </div>
+                    <div class="chart-note">
+                        <p>Horizontal axis: SINR (dB) | Vertical axis: cumulative probability (0~1)</p>
+                    </div>
+                </div>
+                
+                <div class="chart-fullwidth">
+                    <h4>SINR PDF curve(cumulative distribution function)</h4>
+                    <div class="chart-wrapper">
+                        <canvas id="sinr-pdf"></canvas>
+                    </div>
+                    <div class="chart-note">
+                        <p>Horizontal axis: SINR (dB) | Vertical axis: cumulative probability</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="footer">
+            <p>5G信号覆盖监测系统 | 版权所有 © 2025</p>
+        </div>
+    </div>
+
+    <!-- 基站编辑模态框 -->
+    <div id="bs-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3>Edit the base station information</h3>
+            <div id="bs-edit-form"></div>
+            <button id="save-bs-changes">Save your changes</button>
+        </div>
+    </div>
+    
+    <script src="js/script.js"></script>
+</body>
+</html>
